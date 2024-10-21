@@ -1,5 +1,17 @@
+const os = require('node:os')
+const path = require('node:path')
 const core = require('@actions/core')
-const { wait } = require('./wait')
+const knative = require('./knative')
+const environment = require('./env')
+
+/**
+ * @param {string} outputFile
+ * @param {string} inputFile
+ * @returns {string}
+ */
+function generateOutputFilePath(inputFile) {
+  return path.join(os.tmpdir(), path.basename(inputFile))
+}
 
 /**
  * The main function for the action.
@@ -7,18 +19,29 @@ const { wait } = require('./wait')
  */
 async function run() {
   try {
-    const ms = core.getInput('milliseconds', { required: true })
+    const inputFile = core.getInput('input', { required: true })
+    const envFile = core.getInput('env_file', { required: true })
+    const outputFile =
+      core.getInput('output') || generateOutputFilePath(inputFile)
+    const containerName = core.getInput('container_name')
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    const [manifest, env] = await Promise.all([
+      knative.readManifest(inputFile),
+      environment.parse(envFile)
+    ])
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const updatedManifest = knative.updateContainer(
+      manifest,
+      containerName,
+      container => knative.addEnvToContainer(container, env)
+    )
+
+    core.info(`Writing updated manifest to ${outputFile}`)
+
+    await knative.writeManifest(outputFile, updatedManifest)
 
     // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    core.setOutput('output', outputFile)
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)

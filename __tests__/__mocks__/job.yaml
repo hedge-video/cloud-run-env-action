@@ -1,0 +1,31 @@
+apiVersion: run.googleapis.com/v1
+kind: Job
+metadata:
+  name: my-test-job
+  labels:
+    cloud.googleapis.com/location: ${APP_LOCATION}
+spec:
+  template:
+    spec:
+      taskCount: 1
+      template:
+        spec:
+          serviceAccountName: ${APP_SERVICE_ACCOUNT}
+          containers:
+            - name: my-test-job
+              image: ${IMAGE}
+              resources:
+                limits:
+                  cpu: 1000m
+                  memory: 512Mi
+              env:
+                - name: MY_SUPER_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: latest
+                      name: MY_SUPER_SECRET
+
+                - name: MY_APP_SPECIFIC_VARIABLE
+                  value: foo
+          maxRetries: 3
+          timeoutSeconds: '600'

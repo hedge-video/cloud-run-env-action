@@ -1,18 +1,29 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'cloud-run-env-action'
+description:
+  'Appends the given environment variables from a .env file into your cloud run
+  declaration'
+author: 'hedge-video'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  input:
+    description: 'The input cloud run yaml file'
     required: true
-    default: '1000'
+
+  env_file:
+    description: 'The .env file'
+    required: true
+
+  output:
+    description: 'The output file path'
+
+  container_name:
+    description: 'The container name that will receive the env var'
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  output:
+    description: 'The newly generated cloud run yaml file'
 
 runs:
   using: node20
