@@ -10484,7 +10484,7 @@ const jsonScalars = [
         identify: value => typeof value === 'boolean',
         default: true,
         tag: 'tag:yaml.org,2002:bool',
-        test: /^true|false$/,
+        test: /^true$|^false$/,
         resolve: str => str === 'true',
         stringify: stringifyJSON
     },
@@ -11390,7 +11390,7 @@ const timestamp = {
         }
         return new Date(date);
     },
-    stringify: ({ value }) => value.toISOString().replace(/((T00:00)?:00)?\.000Z$/, '')
+    stringify: ({ value }) => value.toISOString().replace(/(T00:00:00)?\.000Z$/, '')
 };
 
 exports.floatTime = floatTime;
@@ -12400,23 +12400,32 @@ function blockString({ comment, type, value }, ctx, onComment, onChompKeep) {
         start = start.replace(/\n+/g, `$&${indent}`);
     }
     const indentSize = indent ? '2' : '1'; // root is at -1
-    let header = (literal ? '|' : '>') + (startWithSpace ? indentSize : '') + chomp;
+    // Leading | or > is added later
+    let header = (startWithSpace ? indentSize : '') + chomp;
     if (comment) {
         header += ' ' + commentString(comment.replace(/ ?[\r\n]+/g, ' '));
         if (onComment)
             onComment();
     }
-    if (literal) {
-        value = value.replace(/\n+/g, `$&${indent}`);
-        return `${header}\n${indent}${start}${value}${end}`;
+    if (!literal) {
+        const foldedValue = value
+            .replace(/\n+/g, '\n$&')
+            .replace(/(?:^|\n)([\t ].*)(?:([\n\t ]*)\n(?![\n\t ]))?/g, '$1$2') // more-indented lines aren't folded
+            //                ^ more-ind. ^ empty     ^ capture next empty lines only at end of indent
+            .replace(/\n+/g, `$&${indent}`);
+        let literalFallback = false;
+        const foldOptions = getFoldOptions(ctx, true);
+        if (blockQuote !== 'folded' && type !== Scalar.Scalar.BLOCK_FOLDED) {
+            foldOptions.onOverflow = () => {
+                literalFallback = true;
+            };
+        }
+        const body = foldFlowLines.foldFlowLines(`${start}${foldedValue}${end}`, indent, foldFlowLines.FOLD_BLOCK, foldOptions);
+        if (!literalFallback)
+            return `>${header}\n${indent}${body}`;
     }
-    value = value
-        .replace(/\n+/g, '\n$&')
-        .replace(/(?:^|\n)([\t ].*)(?:([\n\t ]*)\n(?![\n\t ]))?/g, '$1$2') // more-indented lines aren't folded
-        //                ^ more-ind. ^ empty     ^ capture next empty lines only at end of indent
-        .replace(/\n+/g, `$&${indent}`);
-    const body = foldFlowLines.foldFlowLines(`${start}${value}${end}`, indent, foldFlowLines.FOLD_BLOCK, getFoldOptions(ctx, true));
-    return `${header}\n${indent}${body}`;
+    value = value.replace(/\n+/g, `$&${indent}`);
+    return `|${header}\n${indent}${start}${value}${end}`;
 }
 function plainString(item, ctx, onComment, onChompKeep) {
     const { type, value } = item;
@@ -12759,7 +12768,7 @@ exports.visitAsync = visitAsync;
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"name":"dotenv","version":"16.4.5","description":"Loads environment variables from .env file","main":"lib/main.js","types":"lib/main.d.ts","exports":{".":{"types":"./lib/main.d.ts","require":"./lib/main.js","default":"./lib/main.js"},"./config":"./config.js","./config.js":"./config.js","./lib/env-options":"./lib/env-options.js","./lib/env-options.js":"./lib/env-options.js","./lib/cli-options":"./lib/cli-options.js","./lib/cli-options.js":"./lib/cli-options.js","./package.json":"./package.json"},"scripts":{"dts-check":"tsc --project tests/types/tsconfig.json","lint":"standard","lint-readme":"standard-markdown","pretest":"npm run lint && npm run dts-check","test":"tap tests/*.js --100 -Rspec","test:coverage":"tap --coverage-report=lcov","prerelease":"npm test","release":"standard-version"},"repository":{"type":"git","url":"git://github.com/motdotla/dotenv.git"},"funding":"https://dotenvx.com","keywords":["dotenv","env",".env","environment","variables","config","settings"],"readmeFilename":"README.md","license":"BSD-2-Clause","devDependencies":{"@definitelytyped/dtslint":"^0.0.133","@types/node":"^18.11.3","decache":"^4.6.1","sinon":"^14.0.1","standard":"^17.0.0","standard-markdown":"^7.1.0","standard-version":"^9.5.0","tap":"^16.3.0","tar":"^6.1.11","typescript":"^4.8.4"},"engines":{"node":">=12"},"browser":{"fs":false}}');
+module.exports = /*#__PURE__*/JSON.parse('{"name":"dotenv","version":"16.4.7","description":"Loads environment variables from .env file","main":"lib/main.js","types":"lib/main.d.ts","exports":{".":{"types":"./lib/main.d.ts","require":"./lib/main.js","default":"./lib/main.js"},"./config":"./config.js","./config.js":"./config.js","./lib/env-options":"./lib/env-options.js","./lib/env-options.js":"./lib/env-options.js","./lib/cli-options":"./lib/cli-options.js","./lib/cli-options.js":"./lib/cli-options.js","./package.json":"./package.json"},"scripts":{"dts-check":"tsc --project tests/types/tsconfig.json","lint":"standard","pretest":"npm run lint && npm run dts-check","test":"tap run --allow-empty-coverage --disable-coverage --timeout=60000","test:coverage":"tap run --show-full-coverage --timeout=60000 --coverage-report=lcov","prerelease":"npm test","release":"standard-version"},"repository":{"type":"git","url":"git://github.com/motdotla/dotenv.git"},"funding":"https://dotenvx.com","keywords":["dotenv","env",".env","environment","variables","config","settings"],"readmeFilename":"README.md","license":"BSD-2-Clause","devDependencies":{"@types/node":"^18.11.3","decache":"^4.6.2","sinon":"^14.0.1","standard":"^17.0.0","standard-version":"^9.5.0","tap":"^19.2.0","typescript":"^4.8.4"},"engines":{"node":">=12"},"browser":{"fs":false}}');
 
 /***/ })
 
