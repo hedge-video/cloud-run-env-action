@@ -40,7 +40,7 @@ jobs:
 
       - name: Generate service declaration
         id: app_manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v0.1.1
         with:
           input: ./deploy/production-app.yaml
           env_file: ./deploy/production.env
@@ -150,14 +150,14 @@ jobs:
 
       - name: Generate app declaration
         id: app_manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v0.1.1
         with:
           input: ./app.yaml
           env_file: ./production.env
 
       - name: Generate job declaration
         id: scheduler_manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v0.1.1
         with:
           input: ./scheduler.yaml
           env_file: ./production.env
@@ -224,7 +224,7 @@ jobs:
 
       - name: Generate app declaration
         id: app-manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v0.1.1
         env:
           APP_NAME: ${{ vars.APP_NAME }}
           APP_LOCATION: ${{ vars.APP_LOCATION }}
@@ -299,7 +299,7 @@ jobs:
 
       - name: Generate app declaration
         id: app_manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v0.1.1
         with:
           input: ./app.yaml
           container_name: my-test-app
