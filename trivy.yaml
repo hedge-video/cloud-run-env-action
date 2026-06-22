@@ -1,0 +1,3 @@
+scan:
+  skip-dirs:
+    - __tests__/__mocks__
