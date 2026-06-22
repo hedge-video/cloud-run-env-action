@@ -18,9 +18,9 @@ const { run } = await import('../src/main.js')
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const MOCKS = {
-  serviceManifest: path.join(__dirname, '__mocks__', 'service.yaml'),
-  jobManifest: path.join(__dirname, '__mocks__', 'job.yaml'),
-  envFile: path.join(__dirname, '__mocks__', 'test.env')
+  serviceManifest: path.join(__dirname, '../__fixtures__/inputs/service.yaml'),
+  jobManifest: path.join(__dirname, '../__fixtures__/inputs/job.yaml'),
+  envFile: path.join(__dirname, '../__fixtures__/inputs/test.env')
 }
 
 describe('action', () => {
@@ -257,7 +257,10 @@ describe('action', () => {
           case 'input':
             return MOCKS.serviceManifest
           case 'env_file':
-            return path.join(__dirname, '__mocks__', 'test-with-env.env')
+            return path.join(
+              __dirname,
+              '../__fixtures__/inputs/test-with-env.env'
+            )
           default:
             return ''
         }

@@ -63,8 +63,8 @@ jobs:
         id: test-action
         uses: ./
         with:
-          input: ./__tests__/__mocks__/service.yaml
-          env_file: ./__tests__/__mocks__/test.env
+          input: ./__fixtures__/inputs/service.yaml
+          env_file: ./__fixtures__/inputs/test.env
 
       - name: Test if new manifest exists
         run: |
@@ -94,8 +94,8 @@ jobs:
         id: test-action
         uses: ./
         with:
-          input: ./__tests__/__mocks__/job.yaml
-          env_file: ./__tests__/__mocks__/test.env
+          input: ./__fixtures__/inputs/job.yaml
+          env_file: ./__fixtures__/inputs/test.env
 
       - name: Test if new manifest exists
         run: |
