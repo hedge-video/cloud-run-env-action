@@ -1,6 +1,6 @@
 import os from 'node:os'
 import path from 'node:path'
-import core from '@actions/core'
+import * as core from '@actions/core'
 import * as knative from './knative.js'
 import * as environment from './env.js'
 
