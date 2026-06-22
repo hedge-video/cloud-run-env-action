@@ -1,18 +1,21 @@
 /**
  * Unit tests for the action's main functionality, src/main.js
  */
-const core = require('@actions/core')
-const path = require('node:path')
-const os = require('node:os')
-const fs = require('node:fs/promises')
-const YAML = require('yaml')
-const main = require('../src/main')
+import path from 'node:path'
+import os from 'node:os'
+import fs from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
+import YAML from 'yaml'
+import { jest } from '@jest/globals'
+import * as core from '../__fixtures__/core.js'
 
-jest.spyOn(core, 'info').mockImplementation()
-const getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
-const runMock = jest.spyOn(main, 'run')
+// Mocks should be declared before the module being tested is imported.
+jest.unstable_mockModule('@actions/core', () => core)
+
+// The module being tested should be imported dynamically. This ensures that the
+// mocks are used in place of any actual dependencies.
+const { run } = await import('../src/main.js')
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const MOCKS = {
   serviceManifest: path.join(__dirname, '__mocks__', 'service.yaml'),
@@ -27,7 +30,7 @@ describe('action', () => {
 
   describe('for Service type', () => {
     it('writes a new manifest file as output', async () => {
-      getInputMock.mockImplementation(name => {
+      core.getInput.mockImplementation(name => {
         switch (name) {
           case 'input':
             return MOCKS.serviceManifest
@@ -38,17 +41,16 @@ describe('action', () => {
         }
       })
 
-      await main.run()
+      await run()
 
-      expect(runMock).toHaveReturned()
-      expect(setFailedMock).not.toHaveBeenCalled()
-      expect(setOutputMock).toHaveBeenNthCalledWith(
+      expect(core.setFailed).not.toHaveBeenCalled()
+      expect(core.setOutput).toHaveBeenNthCalledWith(
         1,
         'output',
         expect.any(String)
       )
 
-      const outputFile = setOutputMock.mock.calls[0][1]
+      const outputFile = core.setOutput.mock.calls[0][1]
 
       const newManifest = YAML.parse(
         await fs.readFile(outputFile, {
@@ -107,7 +109,7 @@ describe('action', () => {
     it('allows for passing `output` input', async () => {
       const outputFile = path.join(os.tmpdir(), `service-${Date.now()}.yaml`)
 
-      getInputMock.mockImplementation(name => {
+      core.getInput.mockImplementation(name => {
         switch (name) {
           case 'input':
             return MOCKS.serviceManifest
@@ -120,10 +122,9 @@ describe('action', () => {
         }
       })
 
-      await main.run()
+      await run()
 
-      expect(runMock).toHaveReturned()
-      expect(setFailedMock).not.toHaveBeenCalled()
+      expect(core.setFailed).not.toHaveBeenCalled()
 
       // Check if the file exists
       expect(await fs.stat(outputFile)).not.toBeNull()
@@ -132,7 +133,7 @@ describe('action', () => {
 
   describe('for Job type', () => {
     it('writes a new manifest file as output', async () => {
-      getInputMock.mockImplementation(name => {
+      core.getInput.mockImplementation(name => {
         switch (name) {
           case 'input':
             return MOCKS.jobManifest
@@ -143,17 +144,16 @@ describe('action', () => {
         }
       })
 
-      await main.run()
+      await run()
 
-      expect(runMock).toHaveReturned()
-      expect(setFailedMock).not.toHaveBeenCalled()
-      expect(setOutputMock).toHaveBeenNthCalledWith(
+      expect(core.setFailed).not.toHaveBeenCalled()
+      expect(core.setOutput).toHaveBeenNthCalledWith(
         1,
         'output',
         expect.any(String)
       )
 
-      const outputFile = setOutputMock.mock.calls[0][1]
+      const outputFile = core.setOutput.mock.calls[0][1]
 
       const newManifest = YAML.parse(
         await fs.readFile(outputFile, {
@@ -213,7 +213,7 @@ describe('action', () => {
     it('allows for passing `output` input', async () => {
       const outputFile = path.join(os.tmpdir(), `job-${Date.now()}.yaml`)
 
-      getInputMock.mockImplementation(name => {
+      core.getInput.mockImplementation(name => {
         switch (name) {
           case 'input':
             return MOCKS.jobManifest
@@ -226,10 +226,9 @@ describe('action', () => {
         }
       })
 
-      await main.run()
+      await run()
 
-      expect(runMock).toHaveReturned()
-      expect(setFailedMock).not.toHaveBeenCalled()
+      expect(core.setFailed).not.toHaveBeenCalled()
 
       // Check if the file exists
       expect(() => fs.stat(outputFile)).not.toThrow()
@@ -253,7 +252,7 @@ describe('action', () => {
     })
 
     it('should replace all env vars before parsing', async () => {
-      getInputMock.mockImplementation(name => {
+      core.getInput.mockImplementation(name => {
         switch (name) {
           case 'input':
             return MOCKS.serviceManifest
@@ -264,17 +263,16 @@ describe('action', () => {
         }
       })
 
-      await main.run()
+      await run()
 
-      expect(runMock).toHaveReturned()
-      expect(setFailedMock).not.toHaveBeenCalled()
-      expect(setOutputMock).toHaveBeenNthCalledWith(
+      expect(core.setFailed).not.toHaveBeenCalled()
+      expect(core.setOutput).toHaveBeenNthCalledWith(
         1,
         'output',
         expect.any(String)
       )
 
-      const outputFile = setOutputMock.mock.calls[0][1]
+      const outputFile = core.setOutput.mock.calls[0][1]
 
       const newManifest = YAML.parse(
         await fs.readFile(outputFile, {
@@ -323,7 +321,7 @@ describe('action', () => {
   })
 
   it('sets a failed status when manifest reading fails', async () => {
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation(name => {
       switch (name) {
         case 'input':
           return 'unknown-file.yaml'
@@ -334,17 +332,16 @@ describe('action', () => {
       }
     })
 
-    await main.run()
+    await run()
 
-    expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenNthCalledWith(
+    expect(core.setFailed).toHaveBeenNthCalledWith(
       1,
       `ENOENT: no such file or directory, open 'unknown-file.yaml'`
     )
   })
 
   it('sets a failed status when env file does not exist', async () => {
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation(name => {
       switch (name) {
         case 'input':
           return MOCKS.serviceManifest
@@ -355,17 +352,16 @@ describe('action', () => {
       }
     })
 
-    await main.run()
+    await run()
 
-    expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenNthCalledWith(
+    expect(core.setFailed).toHaveBeenNthCalledWith(
       1,
       `ENOENT: no such file or directory, open 'unknown.env'`
     )
   })
 
   it('sets a failed status when no matching container exists', async () => {
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation(name => {
       switch (name) {
         case 'input':
           return MOCKS.serviceManifest
@@ -378,10 +374,9 @@ describe('action', () => {
       }
     })
 
-    await main.run()
+    await run()
 
-    expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenNthCalledWith(
+    expect(core.setFailed).toHaveBeenNthCalledWith(
       1,
       `Could not find 'unknown' in 'spec.template.spec.containers'`
     )
@@ -391,7 +386,7 @@ describe('action', () => {
 
   for (const field of requiredFields) {
     it(`fails if no '${field}' is provided`, async () => {
-      getInputMock.mockImplementation(name => {
+      core.getInput.mockImplementation(name => {
         switch (name) {
           case field:
             throw new Error(`Input required and not supplied: ${field}`)
@@ -400,10 +395,9 @@ describe('action', () => {
         }
       })
 
-      await main.run()
+      await run()
 
-      expect(runMock).toHaveReturned()
-      expect(setFailedMock).toHaveBeenNthCalledWith(
+      expect(core.setFailed).toHaveBeenNthCalledWith(
         1,
         `Input required and not supplied: ${field}`
       )
