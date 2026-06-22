@@ -19,6 +19,12 @@ MD030:
   ul_multi: 1
   ol_multi: 1
 
+# No inline HTML
+MD033:
+  allowed_elements:
+    - details
+    - summary
+
 # Code block style
 MD046:
   style: fenced

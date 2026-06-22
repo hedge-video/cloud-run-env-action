@@ -11,14 +11,14 @@ to the public under the [project's open source license](LICENSE).
 
 1. [Fork](https://github.com/hedge-video/cloud-run-env-action/fork) and clone
    the repository
-2. Configure and install the dependencies: `npm install`
-3. Create a new branch: `git checkout -b my-branch-name`
-4. Make your changes
-5. Make sure the tests pass: `npm run test`
-6. Run the build: `npm run all`
-7. Push to your fork and
+1. Configure and install the dependencies: `npm install`
+1. Create a new branch: `git checkout -b my-branch-name`
+1. Make your changes
+1. Make sure the tests pass: `npm run test`
+1. Run the build: `npm run all`
+1. Push to your fork and
    [submit a pull request](https://github.com/hedge-video/cloud-run-env-action/compare)
-8. Pat your self on the back and wait for your pull request to be reviewed and
+1. Pat your self on the back and wait for your pull request to be reviewed and
    merged.
 
 Here are a few things you can do that will increase the likelihood of your pull
