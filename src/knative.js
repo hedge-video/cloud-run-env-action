@@ -1,6 +1,6 @@
-const fs = require('node:fs/promises')
-const YAML = require('yaml')
-const { envsubst } = require('./env')
+import fs from 'node:fs/promises'
+import YAML from 'yaml'
+import { envsubst } from './env.js'
 
 /**
  * Reads the given knative manifest and replaces the given env vars.
@@ -8,7 +8,7 @@ const { envsubst } = require('./env')
  * @param {object} [env]
  * @returns {object}
  */
-async function readManifest(filePath, env) {
+export async function readManifest(filePath, env) {
   const file = await fs.readFile(filePath, { encoding: 'utf8' })
 
   return YAML.parse(envsubst(file, env))
@@ -18,7 +18,7 @@ async function readManifest(filePath, env) {
  * @param {string} outputPath
  * @param {object} contents
  */
-function writeManifest(outputPath, contents) {
+export function writeManifest(outputPath, contents) {
   return fs.writeFile(outputPath, YAML.stringify(contents), {
     encoding: 'utf8'
   })
@@ -29,7 +29,7 @@ function writeManifest(outputPath, contents) {
  * @param {object} envVars
  * @returns {object}
  */
-function addEnvToContainer(container, envVars) {
+export function addEnvToContainer(container, envVars) {
   const vars = Object.entries(envVars).map(([key, value]) => ({
     name: key,
     value
@@ -46,7 +46,7 @@ function addEnvToContainer(container, envVars) {
  * @param {string} containerName
  * @param {(manifest: object) => void} transformator
  */
-function updateContainer(manifest, containerName, transformator) {
+export function updateContainer(manifest, containerName, transformator) {
   const { kind, apiVersion } = manifest
 
   switch (true) {
@@ -130,12 +130,4 @@ function updateJobContainer(manifest, containerName, transformator) {
   }
 
   return manifest
-}
-
-module.exports = {
-  readManifest,
-  writeManifest,
-
-  addEnvToContainer,
-  updateContainer
 }
