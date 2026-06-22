@@ -98,7 +98,7 @@ describe('addEnvToContainer()', () => {
     expect(result.env).toContainEqual({ name: 'FOO', value: 'bar' })
   })
 
-  it('handles non existant env', () => {
+  it('handles non existent env', () => {
     const container = {
       name: 'my-test-app',
       image: 'my-test-image'
