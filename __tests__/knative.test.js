@@ -1,10 +1,10 @@
-const fs = require('node:fs/promises')
-const { expect } = require('@jest/globals')
-const {
+import fs from 'node:fs/promises'
+import { expect, jest } from '@jest/globals'
+import {
   readManifest,
   updateContainer,
   addEnvToContainer
-} = require('../src/knative')
+} from '../src/knative.js'
 
 describe('readManifest()', () => {
   beforeEach(() => {
