@@ -200,7 +200,7 @@ describe('updateContainer()', () => {
         }
       }
 
-      const newManifest = updateContainer(manifest, 'my-app', container => ({
+      const newManifest = updateContainer(manifest, 'my-app', (container) => ({
         ...container,
         name: 'foo'
       }))
@@ -309,7 +309,7 @@ describe('updateContainer()', () => {
         }
       }
 
-      const newManifest = updateContainer(manifest, 'my-app', container => ({
+      const newManifest = updateContainer(manifest, 'my-app', (container) => ({
         ...container,
         name: 'foo'
       }))

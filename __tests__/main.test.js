@@ -30,7 +30,7 @@ describe('action', () => {
 
   describe('for Service type', () => {
     it('writes a new manifest file as output', async () => {
-      core.getInput.mockImplementation(name => {
+      core.getInput.mockImplementation((name) => {
         switch (name) {
           case 'input':
             return MOCKS.serviceManifest
@@ -109,7 +109,7 @@ describe('action', () => {
     it('allows for passing `output` input', async () => {
       const outputFile = path.join(os.tmpdir(), `service-${Date.now()}.yaml`)
 
-      core.getInput.mockImplementation(name => {
+      core.getInput.mockImplementation((name) => {
         switch (name) {
           case 'input':
             return MOCKS.serviceManifest
@@ -133,7 +133,7 @@ describe('action', () => {
 
   describe('for Job type', () => {
     it('writes a new manifest file as output', async () => {
-      core.getInput.mockImplementation(name => {
+      core.getInput.mockImplementation((name) => {
         switch (name) {
           case 'input':
             return MOCKS.jobManifest
@@ -213,7 +213,7 @@ describe('action', () => {
     it('allows for passing `output` input', async () => {
       const outputFile = path.join(os.tmpdir(), `job-${Date.now()}.yaml`)
 
-      core.getInput.mockImplementation(name => {
+      core.getInput.mockImplementation((name) => {
         switch (name) {
           case 'input':
             return MOCKS.jobManifest
@@ -252,7 +252,7 @@ describe('action', () => {
     })
 
     it('should replace all env vars before parsing', async () => {
-      core.getInput.mockImplementation(name => {
+      core.getInput.mockImplementation((name) => {
         switch (name) {
           case 'input':
             return MOCKS.serviceManifest
@@ -321,7 +321,7 @@ describe('action', () => {
   })
 
   it('sets a failed status when manifest reading fails', async () => {
-    core.getInput.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         case 'input':
           return 'unknown-file.yaml'
@@ -341,7 +341,7 @@ describe('action', () => {
   })
 
   it('sets a failed status when env file does not exist', async () => {
-    core.getInput.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         case 'input':
           return MOCKS.serviceManifest
@@ -361,7 +361,7 @@ describe('action', () => {
   })
 
   it('sets a failed status when no matching container exists', async () => {
-    core.getInput.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         case 'input':
           return MOCKS.serviceManifest
@@ -386,7 +386,7 @@ describe('action', () => {
 
   for (const field of requiredFields) {
     it(`fails if no '${field}' is provided`, async () => {
-      core.getInput.mockImplementation(name => {
+      core.getInput.mockImplementation((name) => {
         switch (name) {
           case field:
             throw new Error(`Input required and not supplied: ${field}`)

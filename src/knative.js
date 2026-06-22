@@ -80,7 +80,7 @@ function updateServiceContainer(manifest, containerName, transformator) {
 
   // Use the first container when no explicit container is specified.
   const index = containerName
-    ? containers.findIndex(container => container?.name === containerName)
+    ? containers.findIndex((container) => container?.name === containerName)
     : 0
 
   if (index === -1) {
@@ -115,7 +115,7 @@ function updateJobContainer(manifest, containerName, transformator) {
 
   // Use the first container when no explicit container is specified.
   const index = containerName
-    ? containers.findIndex(container => container?.name === containerName)
+    ? containers.findIndex((container) => container?.name === containerName)
     : 0
 
   if (index === -1) {

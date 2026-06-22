@@ -33,7 +33,7 @@ export async function run() {
     const updatedManifest = knative.updateContainer(
       manifest,
       containerName,
-      container => knative.addEnvToContainer(container, env)
+      (container) => knative.addEnvToContainer(container, env)
     )
 
     core.info(`Writing updated manifest to ${outputFile}`)
