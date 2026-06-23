@@ -18,7 +18,7 @@ to the public under the [project's open source license](LICENSE).
 1. Run the build: `npm run all`
 1. Push to your fork and
    [submit a pull request](https://github.com/hedge-video/cloud-run-env-action/compare)
-1. Pat your self on the back and wait for your pull request to be reviewed and
+1. Pat yourself on the back and wait for your pull request to be reviewed and
    merged.
 
 Here are a few things you can do that will increase the likelihood of your pull
