@@ -44,20 +44,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # ... all your google auth steps here
 
       - name: Generate service declaration
         id: app_manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v1
         with:
           input: ./deploy/production-app.yaml
           env_file: ./deploy/production.env
 
       # Example of actually deploying the cloud run app
       - name: Deploy app to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: us-east1
           metadata: ${{ steps.app_manifest.outputs.output }}
@@ -152,32 +152,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # ... all your google auth steps here
 
       - name: Generate app declaration
         id: app_manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v1
         with:
           input: ./app.yaml
           env_file: ./production.env
 
       - name: Generate job declaration
         id: scheduler_manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v1
         with:
           input: ./scheduler.yaml
           env_file: ./production.env
 
       - name: Deploy app to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: us-east1
           metadata: ${{ steps.app_manifest.outputs.output }}
 
       - name: Deploy scheduler to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: us-east1
           metadata: ${{ steps.scheduler_manifest.outputs.output }}
@@ -226,13 +226,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # ... all your google auth steps here
 
       - name: Generate app declaration
         id: app-manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v1
         env:
           APP_NAME: ${{ vars.APP_NAME }}
           APP_LOCATION: ${{ vars.APP_LOCATION }}
@@ -244,7 +244,7 @@ jobs:
 
       # Example of actually deploying the cloud run app
       - name: Deploy app to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: ${{ vars.APP_LOCATION }}
           metadata: ${{ steps.app_manifest.outputs.output }}
@@ -301,13 +301,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # ... all your google auth steps here
 
       - name: Generate app declaration
         id: app_manifest
-        uses: hedge-video/cloud-run-env-action@v0.1.0
+        uses: hedge-video/cloud-run-env-action@v1
         with:
           input: ./app.yaml
           container_name: my-test-app
@@ -315,7 +315,7 @@ jobs:
 
       # Example of actually deploying the cloud run app
       - name: Deploy app to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: ${{ vars.APP_LOCATION }}
           metadata: ${{ steps.app_manifest.outputs.output }}
