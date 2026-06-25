@@ -1,4 +1,4 @@
-const { envsubst } = require('../src/env')
+import { envsubst } from '../src/env.js'
 
 describe('envsubst()', () => {
   const fakeEnv = {

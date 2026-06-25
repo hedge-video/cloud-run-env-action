@@ -1,11 +1,11 @@
-const fs = require('node:fs/promises')
-const dotenv = require('dotenv')
+import fs from 'node:fs/promises'
+import dotenv from 'dotenv'
 
 /**
  * @param {string} filePath
  * @returns {object}
  */
-async function parse(filePath) {
+export async function parse(filePath) {
   const file = await fs.readFile(filePath, { encoding: 'utf8' })
 
   return dotenv.parse(file)
@@ -21,7 +21,7 @@ async function parse(filePath) {
  * @param {object} [env]
  * @returns {string}
  */
-function envsubst(input, env = process.env) {
+export function envsubst(input, env = process.env) {
   const varPattern =
     /\$\{([a-zA-Z_][a-zA-Z0-9_]*)\}|\$([a-zA-Z_][a-zA-Z0-9_]*)/g
 
@@ -40,9 +40,4 @@ function envsubst(input, env = process.env) {
   )
 
   return result
-}
-
-module.exports = {
-  parse,
-  envsubst
 }

@@ -1,10 +1,10 @@
-const fs = require('node:fs/promises')
-const { expect } = require('@jest/globals')
-const {
+import fs from 'node:fs/promises'
+import { expect, jest } from '@jest/globals'
+import {
   readManifest,
   updateContainer,
   addEnvToContainer
-} = require('../src/knative')
+} from '../src/knative.js'
 
 describe('readManifest()', () => {
   beforeEach(() => {
@@ -98,7 +98,7 @@ describe('addEnvToContainer()', () => {
     expect(result.env).toContainEqual({ name: 'FOO', value: 'bar' })
   })
 
-  it('handles non existant env', () => {
+  it('handles non existent env', () => {
     const container = {
       name: 'my-test-app',
       image: 'my-test-image'
@@ -200,7 +200,7 @@ describe('updateContainer()', () => {
         }
       }
 
-      const newManifest = updateContainer(manifest, 'my-app', container => ({
+      const newManifest = updateContainer(manifest, 'my-app', (container) => ({
         ...container,
         name: 'foo'
       }))
@@ -309,7 +309,7 @@ describe('updateContainer()', () => {
         }
       }
 
-      const newManifest = updateContainer(manifest, 'my-app', container => ({
+      const newManifest = updateContainer(manifest, 'my-app', (container) => ({
         ...container,
         name: 'foo'
       }))

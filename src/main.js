@@ -1,8 +1,8 @@
-const os = require('node:os')
-const path = require('node:path')
-const core = require('@actions/core')
-const knative = require('./knative')
-const environment = require('./env')
+import os from 'node:os'
+import path from 'node:path'
+import * as core from '@actions/core'
+import * as knative from './knative.js'
+import * as environment from './env.js'
 
 /**
  * @param {string} outputFile
@@ -17,7 +17,7 @@ function generateOutputFilePath(inputFile) {
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function run() {
+export async function run() {
   try {
     const inputFile = core.getInput('input', { required: true })
     const envFile = core.getInput('env_file', { required: true })
@@ -33,7 +33,7 @@ async function run() {
     const updatedManifest = knative.updateContainer(
       manifest,
       containerName,
-      container => knative.addEnvToContainer(container, env)
+      (container) => knative.addEnvToContainer(container, env)
     )
 
     core.info(`Writing updated manifest to ${outputFile}`)
@@ -46,8 +46,4 @@ async function run() {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
   }
-}
-
-module.exports = {
-  run
 }

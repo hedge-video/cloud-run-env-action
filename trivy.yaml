@@ -1,0 +1,3 @@
+scan:
+  skip-dirs:
+    - __fixtures__/inputs

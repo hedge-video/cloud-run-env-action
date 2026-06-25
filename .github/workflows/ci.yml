@@ -19,11 +19,11 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
         id: setup-node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: npm
@@ -57,14 +57,14 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Test Local Action
         id: test-action
         uses: ./
         with:
-          input: ./__tests__/__mocks__/service.yaml
-          env_file: ./__tests__/__mocks__/test.env
+          input: ./__fixtures__/inputs/service.yaml
+          env_file: ./__fixtures__/inputs/test.env
 
       - name: Test if new manifest exists
         run: |
@@ -88,14 +88,14 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Test Local Action
         id: test-action
         uses: ./
         with:
-          input: ./__tests__/__mocks__/job.yaml
-          env_file: ./__tests__/__mocks__/test.env
+          input: ./__fixtures__/inputs/job.yaml
+          env_file: ./__fixtures__/inputs/test.env
 
       - name: Test if new manifest exists
         run: |

@@ -4,6 +4,11 @@ description:
   declaration'
 author: 'hedge-video'
 
+# Add your action's branding here. This will appear on the GitHub Marketplace.
+branding:
+  icon: 'heart'
+  color: 'red'
+
 # Define your inputs here.
 inputs:
   input:
@@ -26,5 +31,5 @@ outputs:
     description: 'The newly generated cloud run yaml file'
 
 runs:
-  using: node20
+  using: node24
   main: dist/index.js
