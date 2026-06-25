@@ -8,6 +8,16 @@ manage. This GitHub Action should help relieve some of the pains by:
 
 ---
 
+> [!CAUTION]
+>
+> Do not pass sensitive data within your `.env` files as it will be added as a
+> plain text environment variable on the container.
+>
+> Use `env[].valueFrom.secretKeyRef` on the container instead to reference
+> secrets.
+
+---
+
 - [Usage](#usage)
 - [Examples](#examples)
 - [Customizing](#customizing)
