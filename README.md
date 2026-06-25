@@ -8,6 +8,16 @@ manage. This GitHub Action should help relieve some of the pains by:
 
 ---
 
+> [!CAUTION]
+>
+> Do not pass sensitive data within your `.env` files as it will be added as a
+> plain text environment variable on the container.
+>
+> Use `env[].valueFrom.secretKeyRef` on the container instead to reference
+> secrets.
+
+---
+
 - [Usage](#usage)
 - [Examples](#examples)
 - [Customizing](#customizing)
@@ -118,8 +128,6 @@ LOG_LEVEL=info
 
 MAIL_HOST=smtp.sendgrid.net
 MAIL_PORT=587
-MAIL_USERNAME=apikey
-MAIL_PASSWORD=sendgrid_api_key
 MAIL_ENCRYPTION=tls
 MAIL_FROM_NAME="John Smith"
 MAIL_FROM_ADDRESS=from@example.com
