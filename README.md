@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # ... all your google auth steps here
 
@@ -47,7 +47,7 @@ jobs:
 
       # Example of actually deploying the cloud run app
       - name: Deploy app to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: us-east1
           metadata: ${{ steps.app_manifest.outputs.output }}
@@ -144,7 +144,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # ... all your google auth steps here
 
@@ -163,13 +163,13 @@ jobs:
           env_file: ./production.env
 
       - name: Deploy app to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: us-east1
           metadata: ${{ steps.app_manifest.outputs.output }}
 
       - name: Deploy scheduler to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: us-east1
           metadata: ${{ steps.scheduler_manifest.outputs.output }}
@@ -218,7 +218,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # ... all your google auth steps here
 
@@ -236,7 +236,7 @@ jobs:
 
       # Example of actually deploying the cloud run app
       - name: Deploy app to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: ${{ vars.APP_LOCATION }}
           metadata: ${{ steps.app_manifest.outputs.output }}
@@ -293,7 +293,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # ... all your google auth steps here
 
@@ -307,7 +307,7 @@ jobs:
 
       # Example of actually deploying the cloud run app
       - name: Deploy app to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
+        uses: google-github-actions/deploy-cloudrun@v3
         with:
           region: ${{ vars.APP_LOCATION }}
           metadata: ${{ steps.app_manifest.outputs.output }}
