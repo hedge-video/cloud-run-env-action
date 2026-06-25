@@ -118,8 +118,6 @@ LOG_LEVEL=info
 
 MAIL_HOST=smtp.sendgrid.net
 MAIL_PORT=587
-MAIL_USERNAME=apikey
-MAIL_PASSWORD=sendgrid_api_key
 MAIL_ENCRYPTION=tls
 MAIL_FROM_NAME="John Smith"
 MAIL_FROM_ADDRESS=from@example.com
